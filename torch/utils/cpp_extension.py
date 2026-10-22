@@ -1767,7 +1767,7 @@ def include_paths(device_type: str = "cpu", torch_include_dirs=True) -> list[str
         A list of include path strings.
     """
     paths = []
-    lib_include = os.path.join(_TORCH_PATH, 'include')
+    lib_include = os.path.join(sys.prefix, 'include')
     if torch_include_dirs:
         paths.extend([
             lib_include,
@@ -1812,7 +1812,7 @@ def library_paths(device_type: str = "cpu", torch_include_dirs: bool = True, cro
 
     if torch_include_dirs:
         # We need to link against libtorch.so
-        paths.extend([TORCH_LIB_PATH])
+        paths.extend([TORCH_LIB_PATH, os.path.join(sys.prefix, 'lib')])
 
     if device_type == "cuda" and IS_HIP_EXTENSION:
         lib_dir = 'lib'
@@ -2030,9 +2030,9 @@ def _check_and_build_extension_h_precompiler_headers(
 
     compiler = _shell_join(_wrap_compiler(compiler))
 
-    head_file = os.path.join(_TORCH_PATH, 'include', 'torch', 'extension.h')
-    head_file_pch = os.path.join(_TORCH_PATH, 'include', 'torch', 'extension.h.gch')
-    head_file_signature = os.path.join(_TORCH_PATH, 'include', 'torch', 'extension.h.sign')
+    head_file = os.path.join(sys.prefix, 'include', 'torch', 'extension.h')
+    head_file_pch = os.path.join(sys.prefix, 'include', 'torch', 'extension.h.gch')
+    head_file_signature = os.path.join(sys.prefix, 'include', 'torch', 'extension.h.sign')
 
     def listToString(s):
         # initialize an empty string
@@ -2095,7 +2095,7 @@ def _check_and_build_extension_h_precompiler_headers(
         [f"-I{include}" for include in extra_include_paths] if extra_include_paths else []
     )
 
-    lib_include = os.path.join(_TORCH_PATH, 'include')
+    lib_include = os.path.join(sys.prefix, 'include')
     torch_include_dirs = [
         f"-I {lib_include}",
         # Python.h
@@ -2130,8 +2130,8 @@ def remove_extension_h_precompiler_headers() -> None:
         if os.path.exists(path_file):
             os.remove(path_file)
 
-    head_file_pch = os.path.join(_TORCH_PATH, 'include', 'torch', 'extension.h.gch')
-    head_file_signature = os.path.join(_TORCH_PATH, 'include', 'torch', 'extension.h.sign')
+    head_file_pch = os.path.join(sys.prefix, 'include', 'torch', 'extension.h.gch')
+    head_file_signature = os.path.join(sys.prefix, 'include', 'torch', 'extension.h.sign')
 
     _remove_if_file_exists(head_file_pch)
     _remove_if_file_exists(head_file_signature)
@@ -2630,6 +2630,7 @@ def _prepare_ldflags(extra_ldflags, with_cuda, with_sycl, verbose, is_standalone
 
     else:
         extra_ldflags.append(f'-L{TORCH_LIB_PATH}')
+        extra_ldflags.append('-L' + os.path.join(sys.prefix, 'lib'))
         extra_ldflags.append('-lc10')
         if with_cuda:
             extra_ldflags.append('-lc10_hip' if IS_HIP_EXTENSION else '-lc10_cuda')
