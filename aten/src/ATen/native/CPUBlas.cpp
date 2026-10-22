@@ -1,4 +1,5 @@
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
+#include <ATen/native/BlasF77.h>
 #include <ATen/native/CPUBlas.h>
 #include <ATen/native/mkl/LinearAlgebra.h>
 #include <ATen/native/mkldnn/Matmul.h>
@@ -15,17 +16,17 @@
 #if C10_IOS
 #include <Accelerate/Accelerate.h>
 #elif !defined(_ARMPL_H)
-extern "C" void dgemm_(char *transa, char *transb, int *m, int *n, int *k, double *alpha, const double *a, int *lda, const double *b, int *ldb, double *beta, double *c, int *ldc);
-extern "C" void sgemm_(char *transa, char *transb, int *m, int *n, int *k, float *alpha, const float *a, int *lda, const float *b, int *ldb, float *beta, float *c, int *ldc);
-extern "C" void cgemm_(char *transa, char *transb, int *m, int *n, int *k, void *alpha, const void *a, int *lda, const void *b, int *ldb, void *beta, void *c, int *ldc);
-extern "C" void zgemm_(char *transa, char *transb, int *m, int *n, int *k, void *alpha, const void *a, int *lda, const void *b, int *ldb, void *beta, void *c, int *ldc);
+extern "C" void dgemm_(char *transa, char *transb, int *m, int *n, int *k, double *alpha, const double *a, int *lda, const double *b, int *ldb, double *beta, double *c, int *ldc AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void sgemm_(char *transa, char *transb, int *m, int *n, int *k, float *alpha, const float *a, int *lda, const float *b, int *ldb, float *beta, float *c, int *ldc AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void cgemm_(char *transa, char *transb, int *m, int *n, int *k, void *alpha, const void *a, int *lda, const void *b, int *ldb, void *beta, void *c, int *ldc AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void zgemm_(char *transa, char *transb, int *m, int *n, int *k, void *alpha, const void *a, int *lda, const void *b, int *ldb, void *beta, void *c, int *ldc AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 #ifdef BLAS_HAS_SBGEMM
 extern "C" void sbgemm_(char *transa, char *transb, int *m, int *n, int *k,
                 float *alpha,
                 const at::BFloat16 *a, int *lda,
                 const at::BFloat16 *b, int *ldb,
                 float *beta,
-                float *c, int *ldc);
+                float *c, int *ldc AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 #endif  // BLAS_HAS_SBGEMM
 #ifdef BLAS_HAS_SHGEMM
 extern "C" void shgemm_(char *transa, char *transb, int *m, int *n, int *k,
@@ -33,7 +34,7 @@ extern "C" void shgemm_(char *transa, char *transb, int *m, int *n, int *k,
                 const at::Half *a, int *lda,
                 const at::Half *b, int *ldb,
                 float *beta,
-                float *c, int *ldc);
+                float *c, int *ldc AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 #endif  // BLAS_HAS_SHGEMM
 extern "C" void cswap_(int *n, const void *x, int *incx, void *y, int *incy);
 extern "C" void dcopy_(int *n, const double *x, int *incx, double *y, int *incy);

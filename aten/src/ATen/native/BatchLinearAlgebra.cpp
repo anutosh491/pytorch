@@ -1,4 +1,5 @@
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
+#include <ATen/native/BlasF77.h>
 #include <ATen/core/Tensor.h>
 #include <ATen/core/grad_mode.h>
 #include <ATen/Dispatch.h>
@@ -166,26 +167,26 @@ static inline void spotrs_(char *uplo, int *n, int *nrhs, float *a, int *lda, fl
 #else
 
 #ifndef _ARMPL_H  // ArmPL's `cblas.h` pulls in these prototypes.
-extern "C" void zpotrs_(char *uplo, int *n, int *nrhs, std::complex<double> *a, int *lda, std::complex<double> *b, int *ldb, int *info);
-extern "C" void cpotrs_(char *uplo, int *n, int *nrhs, std::complex<float> *a, int *lda, std::complex<float> *b, int *ldb, int *info);
-extern "C" void dpotrs_(char *uplo, int *n, int *nrhs, double *a, int *lda, double *b, int *ldb, int *info);
-extern "C" void spotrs_(char *uplo, int *n, int *nrhs, float *a, int *lda, float *b, int *ldb, int *info);
+extern "C" void zpotrs_(char *uplo, int *n, int *nrhs, std::complex<double> *a, int *lda, std::complex<double> *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void cpotrs_(char *uplo, int *n, int *nrhs, std::complex<float> *a, int *lda, std::complex<float> *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void dpotrs_(char *uplo, int *n, int *nrhs, double *a, int *lda, double *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void spotrs_(char *uplo, int *n, int *nrhs, float *a, int *lda, float *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 #endif
 
 #endif
 
 #ifndef _ARMPL_H  // ArmPL's `cblas.h` pulls in these prototypes.
 // potrf
-extern "C" void zpotrf_(char *uplo, int *n, std::complex<double> *a, int *lda, int *info);
-extern "C" void cpotrf_(char *uplo, int *n, std::complex<float> *a, int *lda, int *info);
-extern "C" void dpotrf_(char *uplo, int *n, double *a, int *lda, int *info);
-extern "C" void spotrf_(char *uplo, int *n, float *a, int *lda, int *info);
+extern "C" void zpotrf_(char *uplo, int *n, std::complex<double> *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void cpotrf_(char *uplo, int *n, std::complex<float> *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void dpotrf_(char *uplo, int *n, double *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void spotrf_(char *uplo, int *n, float *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // potri
-extern "C" void zpotri_(char *uplo, int *n, std::complex<double> *a, int *lda, int *info);
-extern "C" void cpotri_(char *uplo, int *n, std::complex<float> *a, int *lda, int *info);
-extern "C" void dpotri_(char *uplo, int *n, double *a, int *lda, int *info);
-extern "C" void spotri_(char *uplo, int *n, float *a, int *lda, int *info);
+extern "C" void zpotri_(char *uplo, int *n, std::complex<double> *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void cpotri_(char *uplo, int *n, std::complex<float> *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void dpotri_(char *uplo, int *n, double *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void spotri_(char *uplo, int *n, float *a, int *lda, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // sytrf
 extern "C" void dsytrf_(
@@ -196,7 +197,7 @@ extern "C" void dsytrf_(
     int* ipiv,
     double* work,
     int* lwork,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void ssytrf_(
     char* uplo,
     int* n,
@@ -205,7 +206,7 @@ extern "C" void ssytrf_(
     int* ipiv,
     float* work,
     int* lwork,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void zsytrf_(
     char* uplo,
     int* n,
@@ -214,7 +215,7 @@ extern "C" void zsytrf_(
     int* ipiv,
     std::complex<double>* work,
     int* lwork,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void csytrf_(
     char* uplo,
     int* n,
@@ -223,7 +224,7 @@ extern "C" void csytrf_(
     int* ipiv,
     std::complex<float>* work,
     int* lwork,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // hetrf
 extern "C" void zhetrf_(
@@ -234,7 +235,7 @@ extern "C" void zhetrf_(
     int* ipiv,
     std::complex<double>* work,
     int* lwork,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void chetrf_(
     char* uplo,
     int* n,
@@ -243,7 +244,7 @@ extern "C" void chetrf_(
     int* ipiv,
     std::complex<float>* work,
     int* lwork,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // sytrs
 extern "C" void dsytrs_(
@@ -255,7 +256,7 @@ extern "C" void dsytrs_(
     int* ipiv,
     double* b,
     int* ldb,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void ssytrs_(
     char* uplo,
     int* n,
@@ -265,7 +266,7 @@ extern "C" void ssytrs_(
     int* ipiv,
     float* b,
     int* ldb,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void zsytrs_(
     char* uplo,
     int* n,
@@ -275,7 +276,7 @@ extern "C" void zsytrs_(
     int* ipiv,
     std::complex<double>* b,
     int* ldb,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void csytrs_(
     char* uplo,
     int* n,
@@ -285,7 +286,7 @@ extern "C" void csytrs_(
     int* ipiv,
     std::complex<float>* b,
     int* ldb,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // hetrs
 extern "C" void zhetrs_(
@@ -297,7 +298,7 @@ extern "C" void zhetrs_(
     int* ipiv,
     std::complex<double>* b,
     int* ldb,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void chetrs_(
     char* uplo,
     int* n,
@@ -307,7 +308,7 @@ extern "C" void chetrs_(
     int* ipiv,
     std::complex<float>* b,
     int* ldb,
-    int* info);
+    int* info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // geqrf
 extern "C" void zgeqrf_(int *m, int *n, std::complex<double> *a, int *lda, std::complex<double> *tau, std::complex<double> *work, int *lwork, int *info);
@@ -352,22 +353,22 @@ static inline void sormqr_(char *side, char *trans, int *m, int *n, int *k, floa
 }
 #else
 #ifndef _ARMPL_H  // ArmPL's `cblas.h` pulls in these prototypes.
-extern "C" void zunmqr_(char *side, char *trans, int *m, int *n, int *k, std::complex<double> *a, int *lda, std::complex<double> *tau, std::complex<double> *c, int *ldc, std::complex<double> *work, int *lwork, int *info);
-extern "C" void cunmqr_(char *side, char *trans, int *m, int *n, int *k, std::complex<float> *a, int *lda, std::complex<float> *tau, std::complex<float> *c, int *ldc, std::complex<float> *work, int *lwork, int *info);
-extern "C" void dormqr_(char *side, char *trans, int *m, int *n, int *k, double *a, int *lda, double *tau, double *c, int *ldc, double *work, int *lwork, int *info);
-extern "C" void sormqr_(char *side, char *trans, int *m, int *n, int *k, float *a, int *lda, float *tau, float *c, int *ldc, float *work, int *lwork, int *info);
+extern "C" void zunmqr_(char *side, char *trans, int *m, int *n, int *k, std::complex<double> *a, int *lda, std::complex<double> *tau, std::complex<double> *c, int *ldc, std::complex<double> *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void cunmqr_(char *side, char *trans, int *m, int *n, int *k, std::complex<float> *a, int *lda, std::complex<float> *tau, std::complex<float> *c, int *ldc, std::complex<float> *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void dormqr_(char *side, char *trans, int *m, int *n, int *k, double *a, int *lda, double *tau, double *c, int *ldc, double *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void sormqr_(char *side, char *trans, int *m, int *n, int *k, float *a, int *lda, float *tau, float *c, int *ldc, float *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 #endif
 #endif
 #ifndef _ARMPL_H  // ArmPL's `cblas.h` pulls in these prototypes.
 // syevd
-extern "C" void zheevd_(char *jobz, char *uplo, int *n, std::complex<double> *a, int *lda, double *w, std::complex<double> *work, int *lwork, double *rwork, int *lrwork, int *iwork, int *liwork, int *info);
-extern "C" void cheevd_(char *jobz, char *uplo, int *n, std::complex<float> *a, int *lda, float *w, std::complex<float> *work, int *lwork, float *rwork, int *lrwork, int *iwork, int *liwork, int *info);
-extern "C" void dsyevd_(char *jobz, char *uplo, int *n, double *a, int *lda, double *w, double *work, int *lwork, int *iwork, int *liwork, int *info);
-extern "C" void ssyevd_(char *jobz, char *uplo, int *n, float *a, int *lda, float *w, float *work, int *lwork, int *iwork, int *liwork, int *info);
+extern "C" void zheevd_(char *jobz, char *uplo, int *n, std::complex<double> *a, int *lda, double *w, std::complex<double> *work, int *lwork, double *rwork, int *lrwork, int *iwork, int *liwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void cheevd_(char *jobz, char *uplo, int *n, std::complex<float> *a, int *lda, float *w, std::complex<float> *work, int *lwork, float *rwork, int *lrwork, int *iwork, int *liwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void dsyevd_(char *jobz, char *uplo, int *n, double *a, int *lda, double *w, double *work, int *lwork, int *iwork, int *liwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void ssyevd_(char *jobz, char *uplo, int *n, float *a, int *lda, float *w, float *work, int *lwork, int *iwork, int *liwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 
 // geev
-extern "C" void dgeev_(char *jobvl, char *jobvr, int *n, double *a, int *lda, double *wr, double *wi, double* vl, int *ldvl, double *vr, int *ldvr, double *work, int *lwork, int *info);
-extern "C" void sgeev_(char *jobvl, char *jobvr, int *n, float *a, int *lda, float *wr, float *wi, float* vl, int *ldvl, float *vr, int *ldvr, float *work, int *lwork, int *info);
+extern "C" void dgeev_(char *jobvl, char *jobvr, int *n, double *a, int *lda, double *wr, double *wi, double* vl, int *ldvl, double *vr, int *ldvr, double *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
+extern "C" void sgeev_(char *jobvl, char *jobvr, int *n, float *a, int *lda, float *wr, float *wi, float* vl, int *ldvl, float *vr, int *ldvr, float *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 extern "C" void cgeev_(char *jobvl, char *jobvr, int *n,
              std::complex<float> *a, int *lda,
              std::complex<float> *w,
@@ -375,7 +376,7 @@ extern "C" void cgeev_(char *jobvl, char *jobvr, int *n,
              std::complex<float> *vr, int *ldvr,
              std::complex<float> *work, int *lwork,
              float *rwork,
-             int *info);
+             int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 extern "C" void zgeev_(char *jobvl, char *jobvr, int *n,
              std::complex<double> *a, int *lda,
              std::complex<double> *w,
@@ -383,37 +384,37 @@ extern "C" void zgeev_(char *jobvl, char *jobvr, int *n,
              std::complex<double> *vr, int *ldvr,
              std::complex<double> *work, int *lwork,
              double *rwork,
-             int *info);
+             int *info AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1));
 
 // gesdd
 extern "C" void zgesdd_(char *jobz, int *m, int *n, std::complex<double> *a, int *lda,
-                        double *s, std::complex<double> *u, int *ldu, std::complex<double> *vt, int *ldvt, std::complex<double> *work, int *lwork, double *rwork, int *iwork, int *info);
+                        double *s, std::complex<double> *u, int *ldu, std::complex<double> *vt, int *ldvt, std::complex<double> *work, int *lwork, double *rwork, int *iwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void cgesdd_(char *jobz, int *m, int *n, std::complex<float> *a, int *lda,
-                        float *s, std::complex<float> *u, int *ldu, std::complex<float> *vt, int *ldvt, std::complex<float> *work, int *lwork, float *rwork, int *iwork, int *info);
+                        float *s, std::complex<float> *u, int *ldu, std::complex<float> *vt, int *ldvt, std::complex<float> *work, int *lwork, float *rwork, int *iwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void dgesdd_(char *jobz, int *m, int *n, double *a, int *lda,
-                        double *s, double *u, int *ldu, double *vt, int *ldvt, double *work, int *lwork, int *iwork, int *info);
+                        double *s, double *u, int *ldu, double *vt, int *ldvt, double *work, int *lwork, int *iwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void sgesdd_(char *jobz, int *m, int *n, float *a, int *lda,
-                        float *s, float *u, int *ldu, float *vt, int *ldvt, float *work, int *lwork, int *iwork, int *info);
+                        float *s, float *u, int *ldu, float *vt, int *ldvt, float *work, int *lwork, int *iwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // getrs
-extern "C" void zgetrs_(char *trans, int *n, int *nrhs, std::complex<double> *a, int *lda, int *ipiv, std::complex<double> *b, int *ldb, int *info);
-extern "C" void cgetrs_(char *trans, int *n, int *nrhs, std::complex<float> *a, int *lda, int *ipiv, std::complex<float> *b, int *ldb, int *info);
-extern "C" void dgetrs_(char *trans, int *n, int *nrhs, double *a, int *lda, int *ipiv, double *b, int *ldb, int *info);
-extern "C" void sgetrs_(char *trans, int *n, int *nrhs, float *a, int *lda, int *ipiv, float *b, int *ldb, int *info);
+extern "C" void zgetrs_(char *trans, int *n, int *nrhs, std::complex<double> *a, int *lda, int *ipiv, std::complex<double> *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void cgetrs_(char *trans, int *n, int *nrhs, std::complex<float> *a, int *lda, int *ipiv, std::complex<float> *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void dgetrs_(char *trans, int *n, int *nrhs, double *a, int *lda, int *ipiv, double *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void sgetrs_(char *trans, int *n, int *nrhs, float *a, int *lda, int *ipiv, float *b, int *ldb, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // gels
 extern "C" void zgels_(char *trans, int *m, int *n, int *nrhs,
     std::complex<double> *a, int *lda, std::complex<double> *b, int *ldb,
-    std::complex<double> *work, int *lwork, int *info);
+    std::complex<double> *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void cgels_(char *trans, int *m, int *n, int *nrhs,
     std::complex<float> *a, int *lda, std::complex<float> *b, int *ldb,
-    std::complex<float> *work, int *lwork, int *info);
+    std::complex<float> *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void dgels_(char *trans, int *m, int *n, int *nrhs,
     double *a, int *lda, double *b, int *ldb,
-    double *work, int *lwork, int *info);
+    double *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 extern "C" void sgels_(char *trans, int *m, int *n, int *nrhs,
     float *a, int *lda, float *b, int *ldb,
-    float *work, int *lwork, int *info);
+    float *work, int *lwork, int *info AT_FORTRAN_CHARLEN(std::size_t = 1));
 
 // gelsd
 extern "C" void zgelsd_(int *m, int *n, int *nrhs,
@@ -478,10 +479,10 @@ extern "C" void sgelss_(int *m, int *n, int *nrhs,
 #if AT_BUILD_WITH_BLAS()
 // trsm
 #ifndef _ARMPL_H  // ArmPL's `cblas.h` pulls in these prototypes.
-extern "C" void ztrsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, std::complex<double> *alpha, std::complex<double> *a, int *lda, std::complex<double> *b, int *ldb);
-extern "C" void ctrsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, std::complex<float> *alpha, std::complex<float> *a, int *lda, std::complex<float> *b, int *ldb);
-extern "C" void dtrsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, double *alpha, double *a, int *lda, double *b, int *ldb);
-extern "C" void strsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, float *alpha, float *a, int *lda, float *b, int *ldb);
+extern "C" void ztrsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, std::complex<double> *alpha, std::complex<double> *a, int *lda, std::complex<double> *b, int *ldb AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1, std::size_t = 1, std::size_t = 1));
+extern "C" void ctrsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, std::complex<float> *alpha, std::complex<float> *a, int *lda, std::complex<float> *b, int *ldb AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1, std::size_t = 1, std::size_t = 1));
+extern "C" void dtrsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, double *alpha, double *a, int *lda, double *b, int *ldb AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1, std::size_t = 1, std::size_t = 1));
+extern "C" void strsm_(char *side, char *uplo, char *trans, char *diag, int *n, int *nrhs, float *alpha, float *a, int *lda, float *b, int *ldb AT_FORTRAN_CHARLEN(std::size_t = 1, std::size_t = 1, std::size_t = 1, std::size_t = 1));
 #endif
 #endif
 

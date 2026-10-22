@@ -1,4 +1,5 @@
 #define TORCH_ASSERT_ONLY_METHOD_OPERATORS
+#include <ATen/native/BlasF77.h>
 #include <ATen/Context.h>
 #include <ATen/Config.h>
 #include <ATen/OpMathType.h>
@@ -33,8 +34,8 @@ T* remove_const(const T* x) {
 extern "C" double ddot_(int *n, double *x, int *incx, double *y, int *incy);
 extern "C" void dscal_(int *n, double *a, double *x, int *incx);
 extern "C" void sscal_(int *n, float *a, float *x, int *incx);
-extern "C" void dgemv_(char *trans, int *m, int *n, double *alpha, double *a, int *lda, double *x, int *incx, double *beta, double *y, int *incy);
-extern "C" void sgemv_(char *trans, int *m, int *n, float *alpha, float *a, int *lda, float *x, int *incx, float *beta, float *y, int *incy);
+extern "C" void dgemv_(char *trans, int *m, int *n, double *alpha, double *a, int *lda, double *x, int *incx, double *beta, double *y, int *incy AT_FORTRAN_CHARLEN(std::size_t = 1));
+extern "C" void sgemv_(char *trans, int *m, int *n, float *alpha, float *a, int *lda, float *x, int *incx, float *beta, float *y, int *incy AT_FORTRAN_CHARLEN(std::size_t = 1));
 #endif
 
 #if AT_BLAS_F2C()

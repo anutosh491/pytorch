@@ -649,6 +649,8 @@ endif()
 # variables on. Individual USE_SYSTEM_* variables can be toggled with
 # USE_SYSTEM_LIBS being "OFF".
 option(USE_SYSTEM_LIBS "Use all available system-provided libraries." OFF)
+option(BLAS_FORTRAN_STRLEN_END
+       "Pass trailing character lengths to Fortran BLAS and LAPACK" OFF)
 option(USE_SYSTEM_CPUINFO "Use system-provided cpuinfo." OFF)
 option(USE_SYSTEM_SLEEF "Use system-provided sleef." OFF)
 option(USE_SYSTEM_GLOO "Use system-provided gloo." OFF)
