@@ -1,13 +1,14 @@
 #pragma once
 
 #include <ATen/MapAllocator.h>
+#include <c10/macros/Export.h>
 
 #ifdef __cplusplus
 
-void libshm_init(const char* manager_exec_path);
+C10_EXPORT void libshm_init(const char* manager_exec_path);
 
 // Superclass to run a constructor before at::RefcountedMapAllocator
-class THManagedMapAllocatorInit {
+class C10_EXPORT THManagedMapAllocatorInit {
  protected:
   THManagedMapAllocatorInit(const char* manager_handle, const char* filename);
   std::string manager_handle_;
@@ -16,8 +17,8 @@ class THManagedMapAllocatorInit {
 // Like a at::RefcountedMapAllocator, but it also makes use of an external
 // shared memory manager process to ensure that shared memory regions actually
 // get freed in the end (even if processes lose the memory).
-class THManagedMapAllocator : private THManagedMapAllocatorInit,
-                              public at::RefcountedMapAllocator {
+class C10_EXPORT THManagedMapAllocator : private THManagedMapAllocatorInit,
+                                        public at::RefcountedMapAllocator {
  public:
   THManagedMapAllocator(
       const char* manager_handle,
