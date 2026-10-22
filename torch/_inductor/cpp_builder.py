@@ -98,6 +98,10 @@ def _compiler_command(compiler: str, *args: str) -> list[str]:
 
 @functools.cache
 def _compiler_version_string(cpp_compiler: str) -> str:
+    if sys.platform == "emscripten":
+        from .wasm_compiler import version
+
+        return version()
     try:
         return (
             subprocess.check_output(
@@ -118,6 +122,9 @@ def _compiler_version_first_line(cpp_compiler: str) -> str:
 
 @functools.lru_cache(1)
 def cpp_compiler_search(search: Sequence[str | None]) -> str:
+    if sys.platform == "emscripten":
+        _compiler_version_string("clang++")
+        return "clang++"
     from torch._inductor.codecache import get_lock_dir, LOCK_TIMEOUT
 
     for cxx in search:
@@ -693,6 +700,8 @@ def is_msvc_cl() -> bool:
 
 @functools.cache
 def get_compiler_version_info(compiler: str) -> str:
+    if sys.platform == "emscripten":
+        return _compiler_version_string(compiler)
     env = os.environ.copy()
     env["LC_ALL"] = "C"  # Don't localize output
     try:
@@ -1567,7 +1576,7 @@ def _get_openmp_args(
     libs: list[str] = []
     passthrough_args: list[str] = []
 
-    if config.aot_inductor.cross_target_platform == "windows":
+    if sys.platform == "emscripten" or config.aot_inductor.cross_target_platform == "windows":
         return cflags, ldflags, include_dir_paths, lib_dir_paths, libs, passthrough_args
     if _IS_MACOS:
         # Per https://mac.r-project.org/openmp/ right way to pass `openmp` flags to MacOS is via `-Xclang`
@@ -2765,6 +2774,10 @@ class CppBuilder:
         It is must need a temporary directory to store object files in Windows.
         After build completed, delete the temporary directory to save disk space.
         """
+        if sys.platform == "emscripten":
+            from .wasm_compiler import build
+
+            return build(self)
         if self._use_relative_path:
             # remote build uses relative path
             return self.build_fbcode_re()
