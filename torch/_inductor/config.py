@@ -1483,6 +1483,9 @@ def decide_compile_threads() -> int:
     if "TORCHINDUCTOR_COMPILE_THREADS" in os.environ:
         compile_threads = int(os.environ["TORCHINDUCTOR_COMPILE_THREADS"])
         log.info("compile_threads set to %d via env", compile_threads)
+    elif getattr(sys.thread_info, "name", None) == "pthread-stubs":
+        compile_threads = 1
+        log.info("compile_threads set to 1 without Python thread support")
     elif sys.platform == "win32":
         compile_threads = 1
         log.info("compile_threads set to 1 for win32")
