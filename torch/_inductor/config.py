@@ -211,7 +211,8 @@ fx_wrapper: bool = os.environ.get("TORCHINDUCTOR_FX_WRAPPER", "0") == "1"
 # controlled by a separate flag.
 cpp_cache_precompile_headers: bool = (
     os.environ.get(
-        "TORCHINDUCTOR_CPP_CACHE_PRECOMPILE_HEADERS", "0" if is_fbcode() else "1"
+        "TORCHINDUCTOR_CPP_CACHE_PRECOMPILE_HEADERS",
+        "0" if is_fbcode() or sys.platform == "emscripten" else "1",
     )
     == "1"
 )

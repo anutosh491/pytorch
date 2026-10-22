@@ -1074,7 +1074,8 @@ def _get_cpu_arch_cflags(cpp_compiler: str) -> list[str]:
 
     # -march=native is not recognized on Apple Silicon, so the default macOS
     # behavior is no architecture flag unless the user explicitly configures one.
-    if sys.platform == "darwin" and march is None:
+    # WebAssembly also uses its target features rather than the native CPU.
+    if sys.platform in ("darwin", "emscripten") and march is None:
         return []
 
     machine = platform.machine()
@@ -1453,7 +1454,12 @@ def _get_torch_related_args(
 
 
 def _get_python_include_dirs() -> list[str]:
-    include_dir = Path(sysconfig.get_path("include"))
+    if sys.platform == "emscripten":
+        from .wasm_compiler import SYSROOT
+
+        include_dir = SYSROOT / f"include/python{sys.version_info.major}.{sys.version_info.minor}"
+    else:
+        include_dir = Path(sysconfig.get_path("include"))
     # On Darwin Python executable from a framework can return
     # non-existing /Library/Python/... include path, in which case
     # one should use Headers folder from the framework
